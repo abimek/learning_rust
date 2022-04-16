@@ -6,9 +6,9 @@ This repository will contain multiple crates where I will build small-scale appl
 
 ### Projects
 
-- [ ] slices
 - [x] lifetimes
   - [x] 'static
+- [ ] slices
 - [ ] ref keyword
 - [ ] async & await
 - [ ] Mutex
