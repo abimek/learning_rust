@@ -60,5 +60,14 @@ impl<'a, 'b> Person<'a, 'b> {
 }
 ```
 
+### Conclusion
 
+I've learned that lifetime annotation isn't just for dictating how long
+a specifc struct will live, it also gives the developer control over
+what values get retuned and how long said values will live. This means
+that the developer can choose to allow a said return type to live as long
+as the struct that the method was called on or a specific lifetime of a
+refrence within the struct. I love the system which rust has developed
+to keep refrences valid and the system to make relationships between
+different lifetimes. 
 
