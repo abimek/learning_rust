@@ -8,8 +8,8 @@ This repository will contain multiple crates where I will build small-scale appl
 
 - [x] lifetimes
   - [x] 'static
+- [x] ref keyword
 - [ ] slices
-- [ ] ref keyword
 - [ ] async & await
 - [ ] Mutex
 - [ ] Rc
