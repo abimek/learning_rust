@@ -36,35 +36,47 @@ trait Speak1 {
     type Input;
     type Output;
 
-    fn speak(d: Self::Input) -> Self::Output;
+    fn speak(&self, d: Self::Input) -> Self::Output;
 }
 
 /// Both Generics and Associated Types work in most situations, although associated types allows
 /// the devleoper to restrict the number of implemenations of said trait on a data type to one. But
 /// for generics you can implement it muliple types for different types.
 trait Speak2<T> {
-    fn speak() -> T;
+    fn speak(&self) -> T;
 }
 
 struct Human;
-
 struct Person;
 
 impl Speak1 for Human {
     type Input = String;
     type Output = String;
 
-    fn speak(d: Self::Input) -> Self::Output {
+    fn speak(&self, d: Self::Input) -> Self::Output {
         d + &"HIII".to_string()
     }
 }
 
 impl Speak2<String> for Person {
-    fn speak() -> String {
+    fn speak(&self) -> String {
         String::from("HOLA")
     }
 }
 
+impl Speak2<i32> for Person {
+    fn speak(&self) -> i32 {
+        28
+    }
+}
+
+/// Default Generic Paramters are also an option to allow default implemenation using generics,
+/// this is helpful in situations like the Add trait wich allows you to implement the method for
+/// any type that you get in so that you can define different add different types together, but
+/// simulationiously, it uses an associated type so that for every implemenation of the generic,
+/// you know the exact output type, because if there was a generic for the output then you can
+/// could add a Human with a Person and return a String, and also add a Human with a Person and
+/// return a i32
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -87,9 +99,18 @@ mod tests {
     /// So Apparently one can overload aslong as the compiler can infer which function you're
     /// attemtping to call
     #[test]
-    fn genreics_on_trains_overload() {
+    fn generics_on_traits_overload() {
         let manager = Manager {};
         let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         assert_eq!(*(&data[0..2]), *manager.run(&data[..]));
+    }
+    /// When using a generic on a trait, you usally have to specify which method your calling
+    /// exactly since the compiler can't guess which one since the method can be implemented
+    /// multiple times. This is different from associated types which can be called without extra
+    /// syntax because only one version of them can exist.
+    #[test]
+    fn associated_on_trait() {
+        let h = Human;
+        h.speak(String::from("Hell"));
     }
 }
