@@ -70,16 +70,34 @@ impl Speak2<i32> for Person {
     }
 }
 
-/// Default Generic Paramters are also an option to allow default implemenation using generics,
+/// Generic Paramters are also an option to allow default implemenation using generics,
 /// this is helpful in situations like the Add trait wich allows you to implement the method for
 /// any type that you get in so that you can define different add different types together, but
 /// simulationiously, it uses an associated type so that for every implemenation of the generic,
 /// you know the exact output type, because if there was a generic for the output then you can
 /// could add a Human with a Person and return a String, and also add a Human with a Person and
 /// return a i32
+trait SaySomething<T = String> {
+    fn say_it(&self) -> T;
+}
+
+struct Abi;
+
+impl SaySomething for Abi {
+    fn say_it(&self) -> String {
+        String::from("")
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn default_generics_paramters(){
+        let a = Abi{};
+        assert_eq!(a.say_it(), String::from(""));
+    }
+
     #[test]
     fn generics_on_traits() {
         let manager = Manager {};
