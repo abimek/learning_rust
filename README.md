@@ -10,6 +10,11 @@ This repository will contain multiple crates where I will build small-scale appl
   - [x] 'static
 - [x] ref keyword
 - [x] slices
+- [x] Traits
+  - [x] Basics
+  - [x] Trait Bounds
+  - [x] Impl
+  - [x] Dyn
 - [ ] async & await
 - [ ] Mutex
 - [ ] Rc
@@ -18,11 +23,8 @@ This repository will contain multiple crates where I will build small-scale appl
 - [ ] Arc
 - [ ] Error Handling ( Result )
 - [ ] Option
-- [ ] Traits
-  - [ ] Basics
-  - [ ] Trait Bounds
 - [ ] Built in Traits
-  - [ ] Sized
+  - [ ] Sized + Sized with Dyn
   - [ ] Deref
   - [ ] Fn, FnMut, FnOnce
   - [ ] Drop
