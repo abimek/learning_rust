@@ -88,13 +88,80 @@ impl SaySomething for Abi {
         String::from("")
     }
 }
+/// I've seen the keywords Impl and Dyn used a lot in rust programming to implement functionality
+/// over a type that implements a specific trait, I BELIEVE that they allow you to utelize traits
+/// LIKE types, (Impl in method defs only and Dyn as a type (I THINK))
+/// I want to know the difference and how these work, and why one would use one over the other. I
+/// also want to play around with how associated types are put into the method signature when you
+/// only want a specific value for an associated type.
+
+trait Mood {
+    type Item;
+    fn mood(&self) -> Self::Item;
+}
+
+struct JviGuy;
+
+impl Mood for JviGuy {
+    type Item = String;
+
+    fn mood(&self) -> Self::Item {
+        String::from("Grumpy")
+    }
+}
+
+struct Prim;
+
+impl Mood for Prim {
+    type Item = i32;
+    fn mood(&self) -> Self::Item {
+        20
+    }
+}
+
+/// This works because I do Item = String, let the compiler know that if the Associated Type within
+/// any impelementation of Mood isnt String, then it want match -> Error
+/// The following Example doesnt work exactly because Mood doesnt have Item specified, meaning Item
+/// can be of any type, that means Item, could happen to be a type thats not String (i32)
+/// ```compile_fail
+/// fn take_impl_without_associated(mood: impl Mood) -> String {
+///    mood.mood()
+/// }
+///```
+fn take_impl_with_associated(mood: impl Mood<Item = String>) -> String {
+    mood.mood()
+}
+/// OR you can use a generic to return the value inside mood
+fn take_impl_with_associated_and_generic<T>(mood: impl Mood<Item = T>) -> T {
+    mood.mood()
+}
+
+trait DoSomething {
+    fn do_something(&self) -> String;
+}
+
+struct Car;
+
+impl DoSomething for Car {
+    fn do_something(&self) -> String {
+        String::from("Vroom")
+    }
+}
+
+struct Plane;
+
+impl DoSomething for Plane {
+    fn do_something(&self) -> String {
+        String::from("FLY")
+    }
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
-    fn default_generics_paramters(){
-        let a = Abi{};
+    fn default_generics_paramters() {
+        let a = Abi {};
         assert_eq!(a.say_it(), String::from(""));
     }
 
@@ -130,5 +197,32 @@ mod tests {
     fn associated_on_trait() {
         let h = Human;
         h.speak(String::from("Hell"));
+    }
+
+    #[test]
+    fn take_impl_with_associated_test() {
+        let jvi = JviGuy;
+        assert_eq!(String::from("Grumpy"), take_impl_with_associated(jvi));
+    }
+    #[test]
+    fn take_impl_with_associated_and_generic_test() {
+        let prim = Prim;
+        assert_eq!(20 as i32, take_impl_with_associated_and_generic(prim));
+    }
+
+    /// To have a vector of different types we need to utalize trait objects since if you use impl
+    /// then the vec can only be filled with ONE type that implements that trait. Trait objects
+    /// when used as a paramter in a method result in only one specific method being generated
+    /// unlike what happens for impl. This is because TraitObjects consist of a reference that points to
+    /// the actual data and a reference that points to a table of all the methods on that
+    /// specicific trait.
+    #[test]
+    fn vec_of_different_types() {
+        let doers: Vec<Box<dyn DoSomething>> = vec![Box::new(Car), Box::new(Plane)];
+        for doer in doers {
+            if doer.do_something() == String::from("FLY") {
+                assert!(true);
+            }
+        }
     }
 }
