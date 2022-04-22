@@ -155,6 +155,12 @@ impl DoSomething for Plane {
         String::from("FLY")
     }
 }
+/// Without a reference you cant take in a trait object because apparently, dyn DoSomething refers
+/// to the actual data type which could be of any size, so you need to get the fat pointer through
+/// referencing, therefor we add &
+fn take_dyn_ret_string(doer: &dyn DoSomething) -> String {
+    doer.do_something()
+}
 
 #[cfg(test)]
 mod tests {
@@ -224,5 +230,11 @@ mod tests {
                 assert!(true);
             }
         }
+    }
+
+    #[test]
+    fn pass_traitobject() {
+        let doer: &dyn DoSomething = &Car;
+        assert_eq!(String::from("Vroom"), take_dyn_ret_string(doer));
     }
 }
