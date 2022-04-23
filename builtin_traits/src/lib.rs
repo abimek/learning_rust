@@ -1,4 +1,7 @@
 /// SIZED
+/// SIZED
+/// SIZED
+/// SIZED
 /// The sized trait is a very unique trait in rust as its an auto trait that signifies whether a
 /// type is sized or not, it's implied on every type paramter where it can be. It can be used alongside
 /// TraitObjects to opt out of trait objects as adding the Sized bound makes it incapatible with
@@ -75,21 +78,24 @@ fn get_vec_of_speakers2() -> Vec<Box<dyn Speak2>> {
 }
 
 /// this is a type that is unsized
-
+/// This type can not be instantiated
 struct MyUnsizedType {
-    value: str,
+    bytes: [u8],
 }
 
-impl Speak2 for MyUnsizedType {
+struct MyUnsizedTypeInstantiatable<T: ?Sized + AsRef<[u8]>> {
+    bytes: T,
+}
+
+impl<T: ?Sized + AsRef<[u8]>> Speak for MyUnsizedTypeInstantiatable<T> {
     fn speak(&self) -> String {
         String::from("idc")
     }
+}
 
-    fn pitch() -> i32
-    where
-        Self: Sized,
-    {
-        29
+impl Speak for MyUnsizedType {
+    fn speak(&self) -> String {
+        String::from("idc")
     }
 }
 
@@ -134,11 +140,27 @@ fn take_speak2<T: Speak2>(thetype: T) -> String {
     thetype.speak()
 }
 
-/// We can take try to see what happens if we pass in MyUnsizedType which contains a str which has
-/// a size not know at compilation to a function thats generic over T
-fn call_take_speak2() {
-    take_speak2(MyUnsizedType { value: "test" });
+/// Without relaxing the Sized bound here we wouldn't be able to take in T even if T was hiding
+/// behind a reference since rust bounds all generics to Sized
+fn take_speak<T: Speak + ?Sized>(thespeaker: &T) -> String {
+    thespeaker.speak()
 }
+
+/// We can take try to see what happens if we pass in MyUnsizedType which contains a str which has
+/// a size not know at compilation to a function thats generic over T.
+fn call_take_speak() {
+    let s: MyUnsizedTypeInstantiatable<[u8; 3]> = MyUnsizedTypeInstantiatable {
+        bytes: [20, 30, 40],
+    };
+    let unsizeds: &MyUnsizedTypeInstantiatable<[u8]> = &s;
+    // If we dereference unsizeds here then our type would have an unknown size, so we need to hide
+    // it behind reference
+    take_speak(unsizeds);
+}
+/// ----------------------------------------------------------------------------------------------
+/// ----------------------------------------------------------------------------------------------
+/// ----------------------------------------------------------------------------------------------
+/// ----------------------------------------------------------------------------------------------
 #[cfg(test)]
 mod tests {
     use super::*;
