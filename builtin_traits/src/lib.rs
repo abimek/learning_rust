@@ -1,6 +1,5 @@
-/// SIZED
-/// SIZED
-/// SIZED
+mod deref;
+
 /// SIZED
 /// The sized trait is a very unique trait in rust as its an auto trait that signifies whether a
 /// type is sized or not, it's implied on every type paramter where it can be. It can be used alongside
