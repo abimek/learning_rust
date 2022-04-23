@@ -127,7 +127,7 @@ impl Mood for Prim {
 /// fn take_impl_without_associated(mood: impl Mood) -> String {
 ///    mood.mood()
 /// }
-///```
+/// ```
 fn take_impl_with_associated(mood: impl Mood<Item = String>) -> String {
     mood.mood()
 }

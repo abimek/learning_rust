@@ -15,6 +15,13 @@ This repository will contain multiple crates where I will build small-scale appl
   - [x] Trait Bounds
   - [x] Impl
   - [x] Dyn
+- [ ] Built in Traits
+  - [ ] Sized + Sized with Dyn
+  - [ ] Deref
+  - [ ] Fn, FnMut, FnOnce
+  - [ ] Drop
+  - [ ] RangeBounds
+  - [ ] Default
 - [ ] async & await
 - [ ] Mutex
 - [ ] Rc
@@ -23,13 +30,6 @@ This repository will contain multiple crates where I will build small-scale appl
 - [ ] Arc
 - [ ] Error Handling ( Result )
 - [ ] Option
-- [ ] Built in Traits
-  - [ ] Sized + Sized with Dyn
-  - [ ] Deref
-  - [ ] Fn, FnMut, FnOnce
-  - [ ] Drop
-  - [ ] RangeBounds
-  - [ ] Default
 - [ ] Iterators
 - [ ] Box
 - [ ] Declaritive Macros
